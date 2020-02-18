@@ -15,9 +15,9 @@ const edgeDraw = function(tourEdge = [0, 0]) {
 const pointDraw = function(p = new Point()) {
 	fill(color(255,255,255));
 	stroke(255, 0, 0);
-	strokeWeight(2);
+	strokeWeight(1);
 	//noStroke();
-	circle(Width * p.x, Height * p.y, 7);
+	circle(Width * p.x, Height * p.y, 5);
 };
 
 const tourDraw = function() {
@@ -36,25 +36,43 @@ function setup() {
 }
 
 function debuggingPause() {
-	if (this.value === "Pause") {
+	let pause = document.getElementById("debuggingPause");
+	let reset = document.getElementById("debuggingReset");
+	if (pause.value === "Pause") {
 		running = false;
-		this.value = "Continue";
-		document.getElementById("debuggingPause").value="Continue";
+		pause.value = "Continue";
+		reset.style.display = "block";
 	} else {
 		running = true;
-		this.value = "Pause";
-		document.getElementById("debuggingPause").value="Pause";
+		pause.value = "Pause";
+		reset.style.display = "none";
 	}
 }
+
 function debuggingReset() {
-	tour = bestTour;
+	tour = [];
+	for (let i=0; i<vertex.length; i++) {
+	  tour.push(i);
+	}
+
+	cost = tourCost(tour);
+
+	bestTour = tour;
+	bestCost = tourCost(bestTour);
+
+	temperature = 1;
+
+	iter = 0;
+	running = false;
 	drawIter();
 	drawPage();
+	document.getElementById("debuggingPause").value="Start";
 }
+
 
 function drawIter() {
 	document.getElementById('debuggingIter').innerHTML = "";
-	document.getElementById('debuggingIter').innerHTML += "Iter: " + iter + " ";
+	document.getElementById('debuggingIter').innerHTML += "Iter: " + iter + "</br>";
 	document.getElementById('debuggingIter').innerHTML += "Temperature: " + temperature + "</br>";
 }
 
